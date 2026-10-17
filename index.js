@@ -19,7 +19,7 @@ class Server {
 
 
     routes() {
-        
+        this.app.use("/BibliotecaT/authors", authorRouter)
     }
 
     async connectionDB() {
