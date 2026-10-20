@@ -15,7 +15,16 @@ export const listLoans = async (req, res, next) => {
 }
 export const createLoans = async (req, res, next) => {
     try {
-        const nuevo = await Prestamo.create(req.body)
+
+        const dueDate = new Date();
+        dueDate.setDate(dueDate.getDate() + 14);
+
+
+        const nuevo = await Prestamo.create({
+            book: req.body.book,
+            user: req.body.user,
+            dueDate: dueDate
+        })
         console.log(nuevo)
 
         res.status(200).json({
@@ -43,7 +52,7 @@ export const getLoansById = async (req, res, next) => {
             ok: true,
             product
         })
-    }catch (error){
+    } catch (error) {
         next(error)
     }
 }
@@ -51,17 +60,17 @@ export const getLoansById = async (req, res, next) => {
 export const updateLoans = async (req, res, next) => {
     try {
         const loan = await Prestamo.findByIdAndUpdate(req.params.id, req.body, { new: true })
-       if(!loan){
-        res.status(404).json({
-            ok: false,
-            msj: "Producto no encontrado"
-        });
-        return;
-       }
-       res.status(200).json({
-        ok: true,
-        product
-       })
+        if (!loan) {
+            res.status(404).json({
+                ok: false,
+                msj: "Producto no encontrado"
+            });
+            return;
+        }
+        res.status(200).json({
+            ok: true,
+            product
+        })
     } catch (error) {
         next(error);
     }
